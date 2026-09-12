@@ -2,12 +2,19 @@
 
 All notable changes to this project are documented here.
 
+## 0.1.7 - 2026-09-12
+
+- Fixed a startup regression introduced in 0.1.6: `gateway.publicOrigin` was being populated with the HTTP LAN Control UI origin, but OpenClaw accepts plaintext `publicOrigin` only for loopback hosts and requires HTTPS for non-loopback origins.
+- Removed `gateway.publicOrigin` from the generated OpenClaw configuration. `control_ui_origin` is now used only as `gateway.controlUi.allowedOrigins`, which is the correct setting for browser access from the local network.
+- Kept the HAOS browser pairing workflow based on local `devices list` / `devices approve <requestId>` state.
+- Removed the obsolete dedicated 0.1.6 GitHub Actions workflow so only the main ARM64 build/publish workflow produces release images.
+
 ## 0.1.6 - 2026-09-12
 
 - Added a HAOS-friendly browser pairing workflow using OpenClaw's official `devices list` and `devices approve <requestId>` commands.
 - Added `pairing_mode` to watch for pending Control UI browser requests and print their request IDs in the app log.
 - Added `approve_pairing_request` to approve one exact pending request after operator review.
-- Added `gateway.publicOrigin` from the configured Control UI origin.
+- Introduced `gateway.publicOrigin` from the configured Control UI origin; this caused an HTTP LAN validation regression and is corrected in 0.1.7.
 - Kept Gateway authentication sourced from the official `OPENCLAW_GATEWAY_TOKEN` environment variable.
 - Fixed LM Studio API key projection so the configured key is read from the runtime environment.
 - Added `clear_internal_logs_on_start` as a safe one-shot cleanup for OpenClaw's own temporary/internal log files; Supervisor logs remain untouched so no additional Home Assistant privileges are required.
