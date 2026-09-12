@@ -38,11 +38,11 @@ jobs:
           platforms: linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           build-args: |
-            BUILD_VERSION=0.1.8
+            BUILD_VERSION=0.1.9
             BUILD_ARCH=aarch64
           tags: |
-            ghcr.io/making-lemonade/openclaw-haos-addon:0.1.8
+            ghcr.io/making-lemonade/openclaw-haos-addon:0.1.9
             ghcr.io/making-lemonade/openclaw-haos-addon:latest
           labels: |
             org.opencontainers.image.source=https://github.com/making-lemonade/openclaw-haos-addon
-            org.opencontainers.image.version=0.1.8
+            org.opencontainers.image.version=0.1.9
