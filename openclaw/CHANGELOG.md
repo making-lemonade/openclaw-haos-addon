@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here.
 
+## 0.1.10 - 2026-09-12
+
+- Set `models.mode: "replace"` in the generated OpenClaw configuration so the LM Studio endpoint configured in HAOS is the source of truth after every restart.
+- Prevented stale provider data from an agent-local persistent `models.json` from preserving an old LM Studio `baseUrl` after the HAOS option changes.
+- Kept the existing LM Studio auth marker behavior, output-token cap, loop detection, and JIT/preload settings from 0.1.9.
+- No user-specific LAN address or credential was added to the repository.
+
 ## 0.1.9 - 2026-09-12
 
 - Fixed unauthenticated LM Studio runtime configuration for OpenClaw 2026.9.4 by using the official non-secret `lmstudio-local` API-key marker when `lm_studio_api_key` is empty.
