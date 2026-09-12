@@ -30,6 +30,15 @@ configuration:
       Browser-visible origin allowed to access the OpenClaw Control UI. It must
       match how you open the UI, including scheme, host and port. The default
       works when opening http://homeassistant.local:18789.
+  log_level:
+    name: OpenClaw log level
+    description: >-
+      Controls how much OpenClaw writes to the Home Assistant app log. "warn"
+      is recommended for normal use: it keeps warnings and errors while hiding
+      most connect/disconnect, status and informational messages. Use "info" or
+      "debug" temporarily for troubleshooting; "error" shows only errors. This
+      setting reduces future output but cannot erase historical Supervisor log
+      lines already retained by Home Assistant.
   pairing_mode:
     name: Browser pairing discovery mode
     description: >-
@@ -44,11 +53,3 @@ configuration:
       the app asks OpenClaw to approve only this specific pending request. Clear
       the field after the browser connects. Requests expire or can be replaced,
       so obtain a fresh requestId if approval fails.
-  clear_internal_logs_on_start:
-    name: Clear OpenClaw internal logs on next start
-    description: >-
-      One-shot maintenance option. When enabled, the app clears only OpenClaw's
-      own temporary/internal log files before starting. It does not clear the
-      Home Assistant Supervisor journal because the app intentionally has no
-      Supervisor or Docker API privileges. Turn this option off again after the
-      restart.
