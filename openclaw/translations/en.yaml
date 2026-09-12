@@ -1,0 +1,54 @@
+---
+configuration:
+  lm_studio_url:
+    name: Model server URL
+    description: >-
+      Full OpenAI-compatible API base URL for the model server reachable from
+      the Home Assistant host. For LM Studio this normally ends in /v1, for
+      example http://192.168.x.x:1234/v1. Do not use localhost unless the model
+      server runs inside this same app container.
+  lm_studio_model:
+    name: Model ID
+    description: >-
+      Exact model identifier exposed by your model server, for example the ID
+      shown by LM Studio. The value is used as the primary OpenClaw model.
+  lm_studio_api_key:
+    name: Model server API key
+    description: >-
+      Optional API key for the model server. Leave empty when LM Studio
+      authentication is disabled. This value is stored only in Home Assistant
+      app options and is never part of the public repository.
+  gateway_token:
+    name: OpenClaw Gateway secret
+    description: >-
+      Required shared secret used to authenticate the OpenClaw Control UI and
+      Gateway clients. Use a long random value. Keep it private and never commit
+      it to GitHub or paste it into public logs.
+  control_ui_origin:
+    name: Control UI browser origin
+    description: >-
+      Browser-visible origin allowed to access the OpenClaw Control UI. It must
+      match how you open the UI, including scheme, host and port. The default
+      works when opening http://homeassistant.local:18789.
+  pairing_mode:
+    name: Browser pairing discovery mode
+    description: >-
+      Temporary maintenance mode. When enabled, OpenClaw watches for pending
+      Control UI browser pairing requests for up to five minutes and prints the
+      pending request metadata and requestId in the app log. Disable it again
+      after obtaining the requestId.
+  approve_pairing_request:
+    name: Pairing request ID to approve
+    description: >-
+      Optional exact requestId produced by pairing discovery mode. On startup
+      the app asks OpenClaw to approve only this specific pending request. Clear
+      the field after the browser connects. Requests expire or can be replaced,
+      so obtain a fresh requestId if approval fails.
+  clear_internal_logs_on_start:
+    name: Clear OpenClaw internal logs on next start
+    description: >-
+      One-shot maintenance option. When enabled, the app clears only OpenClaw's
+      own temporary/internal log files before starting. It does not clear the
+      Home Assistant Supervisor journal because the app intentionally has no
+      Supervisor or Docker API privileges. Turn this option off again after the
+      restart.
