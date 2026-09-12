@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here.
 
+## 0.1.6 - 2026-09-12
+
+- Added a HAOS-friendly browser pairing workflow using OpenClaw's official `devices list` and `devices approve <requestId>` commands.
+- Added `pairing_mode` to watch for pending Control UI browser requests and print their request IDs in the app log.
+- Added `approve_pairing_request` to approve one exact pending request after operator review.
+- Added `gateway.publicOrigin` from the configured Control UI origin.
+- Kept Gateway authentication sourced from the official `OPENCLAW_GATEWAY_TOKEN` environment variable.
+- Fixed LM Studio API key projection so the configured key is passed from the environment instead of being written as a literal placeholder.
+- No bootstrap token or Gateway secret is printed in the pairing log flow.
+
 ## 0.1.5 - 2026-09-12
 
 - Reduced the inherited OpenClaw Docker healthcheck interval from 3 minutes to 15 seconds for faster HAOS readiness detection.
