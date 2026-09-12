@@ -93,7 +93,10 @@ const cfg = {
       enabled: true
     }
   },
-  models: { providers: { lmstudio: provider } }
+  models: {
+    mode: 'replace',
+    providers: { lmstudio: provider }
+  }
 };
 fs.mkdirSync('/data/.openclaw/workspace', { recursive: true });
 fs.writeFileSync('/data/.openclaw/openclaw.json', JSON.stringify(cfg, null, 2), { mode: 0o600 });
