@@ -3,8 +3,15 @@ set -eu
 
 OPTIONS=/data/options.json
 STATE=/data/.openclaw
-CONFIG="$STATE/openclaw.json"
 WORKSPACE="$STATE/workspace"
+
+# HAOS mounts /data at runtime. Prepare the private app volume as root, then
+# restart this script as the upstream non-root node user (uid/gid 1000).
+if [ "$(id -u)" = "0" ]; then
+  mkdir -p "$WORKSPACE"
+  chown -R node:node /data
+  exec gosu node:node "$0" "$@"
+fi
 
 mkdir -p "$WORKSPACE"
 
