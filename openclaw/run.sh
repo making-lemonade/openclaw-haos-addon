@@ -25,9 +25,9 @@ LM_STUDIO_MODEL="$(read_opt lm_studio_model)"
 LM_STUDIO_API_KEY="$(read_opt lm_studio_api_key)"
 GATEWAY_TOKEN="$(read_opt gateway_token)"
 CONTROL_UI_ORIGIN="$(read_opt control_ui_origin)"
+LOG_LEVEL="$(read_opt log_level)"
 PAIRING_MODE="$(read_opt pairing_mode)"
 APPROVE_PAIRING_REQUEST="$(read_opt approve_pairing_request)"
-CLEAR_INTERNAL_LOGS="$(read_opt clear_internal_logs_on_start)"
 
 if [ -z "$LM_STUDIO_URL" ] || [ -z "$LM_STUDIO_MODEL" ]; then
   echo "ERROR: configure lm_studio_url and lm_studio_model in the app options."
@@ -44,16 +44,13 @@ if [ -z "$CONTROL_UI_ORIGIN" ]; then
   exit 1
 fi
 
-if [ "$CLEAR_INTERNAL_LOGS" = "true" ]; then
-  echo "OpenClaw: clearing temporary/internal OpenClaw log files before startup."
-  rm -rf /tmp/openclaw 2>/dev/null || true
-  if [ -d "$STATE/logs" ]; then
-    find "$STATE/logs" -mindepth 1 -maxdepth 1 -type f -delete 2>/dev/null || true
-  fi
+if [ -z "$LOG_LEVEL" ]; then
+  LOG_LEVEL="warn"
 fi
 
 export LM_API_TOKEN="$LM_STUDIO_API_KEY"
 export OPENCLAW_GATEWAY_TOKEN="$GATEWAY_TOKEN"
+export OPENCLAW_LOG_LEVEL="$LOG_LEVEL"
 
 node <<'NODE'
 const fs = require('fs');
