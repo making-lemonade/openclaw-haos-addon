@@ -56,13 +56,20 @@ node <<'NODE'
 const fs = require('fs');
 const options = JSON.parse(fs.readFileSync('/data/options.json', 'utf8'));
 const model = options.lm_studio_model;
+const configuredApiKey = typeof options.lm_studio_api_key === 'string'
+  ? options.lm_studio_api_key.trim()
+  : '';
 const provider = {
   baseUrl: options.lm_studio_url,
+  apiKey: configuredApiKey || 'lmstudio-local',
   api: 'openai-completions',
   params: { preload: false },
-  models: [{ id: model, name: model }]
+  models: [{
+    id: model,
+    name: model,
+    maxTokens: 4096
+  }]
 };
-if (options.lm_studio_api_key) provider.apiKey = process.env.LM_API_TOKEN;
 const cfg = {
   gateway: {
     mode: 'local',
@@ -79,6 +86,11 @@ const cfg = {
     defaults: {
       model: { primary: `lmstudio/${model}` },
       models: { [`lmstudio/${model}`]: { alias: 'Local' } }
+    }
+  },
+  tools: {
+    loopDetection: {
+      enabled: true
     }
   },
   models: { providers: { lmstudio: provider } }
