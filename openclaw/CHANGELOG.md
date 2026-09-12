@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here.
 
+## 0.1.8 - 2026-09-12
+
+- Replaced the misleading `clear_internal_logs_on_start` maintenance option with a native OpenClaw `log_level` selector.
+- Added HAOS choices `error`, `warn`, `info`, and `debug`; the default is now `warn` for quieter normal operation.
+- The selected value is exported as OpenClaw's official `OPENCLAW_LOG_LEVEL` runtime variable.
+- `warn` keeps warnings and errors while suppressing most normal WebSocket connect/disconnect, status, and informational chatter.
+- Updated Italian and English HAOS descriptions to explain that log level reduces future output but cannot erase historical Supervisor journal lines already retained by Home Assistant.
+- No additional Home Assistant, Supervisor, Docker, host-network, privileged, or hardware permissions were granted.
+
 ## 0.1.7 - 2026-09-12
 
 - Fixed a startup regression introduced in 0.1.6: `gateway.publicOrigin` was being populated with the HTTP LAN Control UI origin, but OpenClaw accepts plaintext `publicOrigin` only for loopback hosts and requires HTTPS for non-loopback origins.
