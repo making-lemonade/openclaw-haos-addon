@@ -1,5 +1,5 @@
 name: OpenClaw
-version: "0.1.5"
+version: "0.1.6"
 slug: openclaw
 description: "Isolated OpenClaw gateway for Home Assistant OS, using LM Studio on your LAN"
 url: "https://github.com/making-lemonade/openclaw-haos-addon"
@@ -41,9 +41,13 @@ options:
   lm_studio_api_key: ""
   gateway_token: "CHANGE_ME_TO_A_LONG_RANDOM_TOKEN"
   control_ui_origin: "http://homeassistant.local:18789"
+  pairing_mode: false
+  pairing_request_id: ""
 schema:
   lm_studio_url: url
   lm_studio_model: str
   lm_studio_api_key: password?
   gateway_token: password
   control_ui_origin: url
+  pairing_mode: bool
+  pairing_request_id: str?
