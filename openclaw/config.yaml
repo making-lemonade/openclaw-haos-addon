@@ -1,8 +1,9 @@
 name: OpenClaw
-version: "0.1.1"
+version: "0.1.2"
 slug: openclaw
 description: "Isolated OpenClaw gateway for Home Assistant OS, using LM Studio on your LAN"
 url: "https://github.com/making-lemonade/openclaw-haos-addon"
+image: "ghcr.io/making-lemonade/openclaw-haos-addon"
 arch:
   - aarch64
 startup: application
