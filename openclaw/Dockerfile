@@ -1,6 +1,6 @@
 FROM ghcr.io/openclaw/openclaw:2026.9.4-arm64@sha256:a71d22cd48540486192b584feba0483ced5d3542335d4b68e5358a01b3945eb5
 
-ARG BUILD_VERSION=0.1.8
+ARG BUILD_VERSION=0.1.9
 ARG BUILD_ARCH=aarch64
 LABEL io.hass.version="${BUILD_VERSION}" \
       io.hass.type="app" \
