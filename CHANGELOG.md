@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here.
 
+## 0.1.9 - 2026-09-12
+
+- Fixed unauthenticated LM Studio runtime configuration for OpenClaw 2026.9.4 by using the official non-secret `lmstudio-local` API-key marker when `lm_studio_api_key` is empty.
+- Kept real LM Studio API keys unchanged when authentication is enabled.
+- Added `maxTokens: 4096` to the configured local model entry to bound individual model outputs.
+- Enabled OpenClaw `tools.loopDetection.enabled` globally, as recommended for smaller local models, to stop repetitive no-progress tool loops.
+- Kept LM Studio preload disabled so LM Studio JIT/TTL can own model lifecycle.
+- No private LAN address, model selection, Gateway token, or user-specific credential was added to the public repository.
+
 ## 0.1.8 - 2026-09-12
 
 - Replaced the misleading `clear_internal_logs_on_start` maintenance option with a native OpenClaw `log_level` selector.
