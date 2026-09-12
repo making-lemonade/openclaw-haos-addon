@@ -27,15 +27,24 @@ GATEWAY_TOKEN="$(read_opt gateway_token)"
 CONTROL_UI_ORIGIN="$(read_opt control_ui_origin)"
 PAIRING_MODE="$(read_opt pairing_mode)"
 APPROVE_PAIRING_REQUEST="$(read_opt approve_pairing_request)"
+CLEAR_INTERNAL_LOGS="$(read_opt clear_internal_logs_on_start)"
 
 if [ -z "$LM_STUDIO_URL" ] || [ -z "$LM_STUDIO_MODEL" ]; then
   echo "ERROR: configure lm_studio_url and lm_studio_model in the app options."
   exit 1
 fi
 
-if [ -z "$GATEWAY_TOKEN" ] || [ "$GATEWAY_TOKEN" = "CHANGE_ME_TO_A_LONG_RANDOM_TOKEN" ]; then
-  echo "ERROR: replace gateway_token with a long random value before starting OpenClaw."
+if [ -z "$GATEWAY_TOKEN" ]; then
+  echo "ERROR: configure gateway_token with a long random value before starting OpenClaw."
   exit 1
+fi
+
+if [ "$CLEAR_INTERNAL_LOGS" = "true" ]; then
+  echo "OpenClaw: clearing temporary/internal OpenClaw log files before startup."
+  rm -rf /tmp/openclaw 2>/dev/null || true
+  if [ -d "$STATE/logs" ]; then
+    find "$STATE/logs" -mindepth 1 -maxdepth 1 -type f -delete 2>/dev/null || true
+  fi
 fi
 
 export LM_API_TOKEN="$LM_STUDIO_API_KEY"
