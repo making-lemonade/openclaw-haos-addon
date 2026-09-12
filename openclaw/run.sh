@@ -55,7 +55,10 @@ const cfg = {
     mode: 'local',
     bind: 'lan',
     port: 18789,
-    auth: { mode: 'token' },
+    auth: {
+      mode: 'token',
+      token: '${OPENCLAW_GATEWAY_TOKEN}'
+    },
     controlUi: {
       enabled: true,
       allowedOrigins: [options.control_ui_origin]
@@ -74,4 +77,4 @@ fs.mkdirSync('/data/.openclaw/workspace', { recursive: true });
 fs.writeFileSync('/data/.openclaw/openclaw.json', JSON.stringify(cfg, null, 2), { mode: 0o600 });
 NODE
 
-exec node dist/index.js gateway --bind lan --port 18789 --auth token --token "$GATEWAY_TOKEN"
+exec node dist/index.js gateway --bind lan --port 18789
