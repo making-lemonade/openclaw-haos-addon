@@ -47,7 +47,7 @@ const provider = {
   baseUrl: options.lm_studio_url,
   api: 'openai-completions',
   params: { preload: false },
-  models: [{ id: model }]
+  models: [{ id: model, name: model }]
 };
 if (options.lm_studio_api_key) provider.apiKey = '${LM_API_TOKEN}';
 const cfg = {
