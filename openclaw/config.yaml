@@ -1,5 +1,5 @@
 name: OpenClaw
-version: "0.1.0"
+version: "0.1.1"
 slug: openclaw
 description: "Isolated OpenClaw gateway for Home Assistant OS, using LM Studio on your LAN"
 url: "https://github.com/making-lemonade/openclaw-haos-addon"
@@ -7,20 +7,29 @@ arch:
   - aarch64
 startup: application
 boot: auto
-init: true
+init: false
+stage: experimental
+backup: cold
 host_network: false
+host_ipc: false
+host_pid: false
+host_uts: false
 privileged: []
 full_access: false
 apparmor: true
 hassio_api: false
 homeassistant_api: false
 docker_api: false
+auth_api: false
 audio: false
 video: false
 gpio: false
 usb: false
 uart: false
 udev: false
+devicetree: false
+kernel_modules: false
+tmpfs: true
 ports:
   18789/tcp: 18789
 ports_description:
