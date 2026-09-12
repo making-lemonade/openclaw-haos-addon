@@ -9,8 +9,12 @@ All notable changes to this project are documented here.
 - Added `approve_pairing_request` to approve one exact pending request after operator review.
 - Added `gateway.publicOrigin` from the configured Control UI origin.
 - Kept Gateway authentication sourced from the official `OPENCLAW_GATEWAY_TOKEN` environment variable.
-- Fixed LM Studio API key projection so the configured key is passed from the environment instead of being written as a literal placeholder.
-- No bootstrap token or Gateway secret is printed in the pairing log flow.
+- Fixed LM Studio API key projection so the configured key is read from the runtime environment.
+- Added `clear_internal_logs_on_start` as a safe one-shot cleanup for OpenClaw's own temporary/internal log files; Supervisor logs remain untouched so no additional Home Assistant privileges are required.
+- Added detailed English and Italian descriptions for every HAOS configuration option.
+- Replaced host-specific defaults with generic required values so no private LAN IP, model ID, API key, or Gateway secret is committed to the public repository.
+- Added the official OpenClaw lobster icon from the upstream OpenClaw repository for the Home Assistant app store entry.
+- No bootstrap token or Gateway secret is printed by the pairing workflow.
 
 ## 0.1.5 - 2026-09-12
 
