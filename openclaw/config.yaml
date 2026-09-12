@@ -1,7 +1,7 @@
 name: OpenClaw
 version: "0.1.6"
 slug: openclaw
-description: "Isolated OpenClaw gateway for Home Assistant OS, using LM Studio on your LAN"
+description: "Isolated OpenClaw gateway for Home Assistant OS, using an OpenAI-compatible model server such as LM Studio on your LAN"
 url: "https://github.com/making-lemonade/openclaw-haos-addon"
 image: "ghcr.io/making-lemonade/openclaw-haos-addon"
 arch:
@@ -36,13 +36,14 @@ ports:
 ports_description:
   18789/tcp: OpenClaw Gateway / Control UI
 options:
-  lm_studio_url: "http://192.168.1.50:1234/v1"
-  lm_studio_model: ""
+  lm_studio_url: null
+  lm_studio_model: null
   lm_studio_api_key: ""
-  gateway_token: "CHANGE_ME_TO_A_LONG_RANDOM_TOKEN"
+  gateway_token: null
   control_ui_origin: "http://homeassistant.local:18789"
   pairing_mode: false
   approve_pairing_request: ""
+  clear_internal_logs_on_start: false
 schema:
   lm_studio_url: url
   lm_studio_model: str
@@ -51,3 +52,4 @@ schema:
   control_ui_origin: url
   pairing_mode: bool
   approve_pairing_request: str?
+  clear_internal_logs_on_start: bool
