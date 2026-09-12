@@ -39,6 +39,11 @@ if [ -z "$GATEWAY_TOKEN" ]; then
   exit 1
 fi
 
+if [ -z "$CONTROL_UI_ORIGIN" ]; then
+  echo "ERROR: configure control_ui_origin with the exact browser origin used for the Control UI."
+  exit 1
+fi
+
 if [ "$CLEAR_INTERNAL_LOGS" = "true" ]; then
   echo "OpenClaw: clearing temporary/internal OpenClaw log files before startup."
   rm -rf /tmp/openclaw 2>/dev/null || true
@@ -66,7 +71,6 @@ const cfg = {
     mode: 'local',
     bind: 'lan',
     port: 18789,
-    publicOrigin: options.control_ui_origin,
     auth: { mode: 'token' },
     controlUi: {
       enabled: true,
