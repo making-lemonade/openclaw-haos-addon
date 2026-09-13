@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here.
 
+## 0.1.13 - 2026-09-13
+
+- Changed Gateway authentication ownership so OpenClaw now persists and owns the native Gateway password.
+- Added a first-login bootstrap flow: when no native Gateway password exists, the wrapper seeds it from the optional HAOS `gateway_password` field or generates a strong random password and prints it once in the app log.
+- After the first login, changing the Gateway password in the native OpenClaw Control UI is preserved across HAOS restarts and wrapper upgrades.
+- Legacy `gateway_token` is now ignored by the wrapper.
+- The wrapper no longer exports `OPENCLAW_GATEWAY_TOKEN` or `OPENCLAW_GATEWAY_PASSWORD`, preventing HAOS environment credentials from overriding password changes made in OpenClaw.
+- Existing model/provider/agent/tool configuration remains owned by OpenClaw and is preserved.
+
 ## 0.1.12 - 2026-09-13
 
 - Switched the HAOS Gateway authentication flow from token mode to password mode.
