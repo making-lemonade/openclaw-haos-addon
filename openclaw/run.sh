@@ -21,14 +21,21 @@ read_opt() {
   node -e 'const fs=require("fs"); const o=JSON.parse(fs.readFileSync(process.argv[1],"utf8")); const v=o[process.argv[2]]; if (v !== undefined && v !== null) process.stdout.write(String(v));' "$OPTIONS" "$key"
 }
 
-GATEWAY_TOKEN="$(read_opt gateway_token)"
+GATEWAY_PASSWORD="$(read_opt gateway_password)"
+LEGACY_GATEWAY_TOKEN="$(read_opt gateway_token)"
 CONTROL_UI_ORIGIN="$(read_opt control_ui_origin)"
 LOG_LEVEL="$(read_opt log_level)"
 PAIRING_MODE="$(read_opt pairing_mode)"
 APPROVE_PAIRING_REQUEST="$(read_opt approve_pairing_request)"
 
-if [ -z "$GATEWAY_TOKEN" ]; then
-  echo "ERROR: configure gateway_token with a long random value before starting OpenClaw."
+if [ -z "$GATEWAY_PASSWORD" ] && [ -n "$LEGACY_GATEWAY_TOKEN" ]; then
+  GATEWAY_PASSWORD="$LEGACY_GATEWAY_TOKEN"
+  echo "OpenClaw HAOS: gateway_password is empty; using the legacy gateway_token value as a temporary password for upgrade compatibility."
+  echo "OpenClaw HAOS: set gateway_password in HAOS and then clear the legacy gateway_token field."
+fi
+
+if [ -z "$GATEWAY_PASSWORD" ]; then
+  echo "ERROR: configure gateway_password before starting OpenClaw."
   exit 1
 fi
 
@@ -41,13 +48,17 @@ if [ -z "$LOG_LEVEL" ]; then
   LOG_LEVEL="warn"
 fi
 
-export OPENCLAW_GATEWAY_TOKEN="$GATEWAY_TOKEN"
+# Keep the Gateway credential out of openclaw.json. OpenClaw officially supports
+# OPENCLAW_GATEWAY_PASSWORD for password authentication.
+unset OPENCLAW_GATEWAY_TOKEN 2>/dev/null || true
+export OPENCLAW_GATEWAY_PASSWORD="$GATEWAY_PASSWORD"
 export OPENCLAW_LOG_LEVEL="$LOG_LEVEL"
 
 printf '%s\n' "============================================================"
 printf 'OpenClaw HAOS wrapper: %s\n' "${OPENCLAW_HAOS_WRAPPER_VERSION:-unknown}"
 printf 'OpenClaw upstream: %s\n' "${OPENCLAW_UPSTREAM_VERSION:-unknown}"
 printf 'OpenClaw config: %s\n' "$CONFIG"
+printf 'Gateway authentication: password (credential supplied by HAOS environment)\n'
 printf '%s\n' "============================================================"
 
 # OpenClaw owns all model, agent, tool, memory and provider configuration.
@@ -74,8 +85,8 @@ if (fs.existsSync(path)) {
 }
 
 const existingGateway = asObject(current.gateway);
-const auth = { ...asObject(existingGateway.auth), mode: 'token' };
-// The Gateway secret is supplied only through OPENCLAW_GATEWAY_TOKEN.
+const auth = { ...asObject(existingGateway.auth), mode: 'password' };
+// The Gateway password is supplied only through OPENCLAW_GATEWAY_PASSWORD.
 delete auth.token;
 delete auth.password;
 
@@ -204,7 +215,7 @@ elif [ -n "$APPROVE_PAIRING_REQUEST" ]; then
   fi
 elif [ "$PAIRING_MODE" = "true" ]; then
   echo "OpenClaw pairing mode is active for 5 minutes."
-  echo "Open the Control UI, enter the Gateway secret, and press Connect."
+  echo "Open the Control UI, enter the Gateway password, and press Connect."
   echo "Waiting for a pending browser request..."
 
   i=0
