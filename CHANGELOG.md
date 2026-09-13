@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented here.
 
+## 0.1.11 - 2026-09-13
+
+- Stopped regenerating OpenClaw model, provider, agent, tool and memory configuration from HAOS app options on every startup.
+- OpenClaw now owns and persists its native `openclaw.json` model/provider configuration, editable through the OpenClaw Control UI.
+- The HAOS wrapper now limits its config changes to Gateway infrastructure required by the app: LAN bind, port 18789, token auth mode, allowed Control UI origin, and disabled terminal.
+- Legacy `lm_studio_url`, `lm_studio_model`, and `lm_studio_api_key` HAOS fields remain only for upgrade compatibility and are ignored by 0.1.11+.
+- Added an explicit startup banner showing the running HAOS wrapper version, upstream OpenClaw version, and config file path.
+- Added safe startup diagnostics for the configured primary model and provider endpoint without printing credentials.
+- Added bounded Gateway shutdown handling so HAOS restarts do not leave OpenClaw draining active work for several minutes before Supervisor force-kills the container.
+- No private LAN address, model selection, Gateway token, or user-specific credential was added to the public repository.
+
 ## 0.1.10 - 2026-09-12
 
 - Set `models.mode: "replace"` in the generated OpenClaw configuration so the LM Studio endpoint configured in HAOS is the source of truth after every restart.
