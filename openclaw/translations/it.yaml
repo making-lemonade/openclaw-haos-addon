@@ -1,23 +1,24 @@
 ---
 configuration:
   lm_studio_url:
-    name: URL del server modello
+    name: URL legacy del server modello
     description: >-
-      URL base completo dell'API compatibile OpenAI del server modello raggiungibile
-      dal dispositivo Home Assistant. Con LM Studio normalmente termina con /v1,
-      ad esempio http://192.168.x.x:1234/v1. Non usare localhost a meno che il
-      server modello non giri nello stesso container di questa app.
+      Campo di compatibilità obsoleto. Dalla versione 0.1.11 questa opzione HAOS
+      viene ignorata. Configura LM Studio e gli altri provider direttamente nella
+      Control UI nativa di OpenClaw, così OpenClaw gestisce e persiste la propria
+      configurazione dei modelli.
   lm_studio_model:
-    name: ID del modello
+    name: ID modello legacy
     description: >-
-      Identificatore esatto del modello esposto dal server, ad esempio quello
-      mostrato da LM Studio. Viene usato come modello principale di OpenClaw.
+      Campo di compatibilità obsoleto. Dalla versione 0.1.11 questa opzione HAOS
+      viene ignorata. Seleziona e configura i modelli direttamente nella Control
+      UI nativa di OpenClaw.
   lm_studio_api_key:
-    name: Chiave API del server modello
+    name: Chiave API legacy del server modello
     description: >-
-      Chiave API opzionale per il server modello. Lasciala vuota se
-      l'autenticazione di LM Studio è disattivata. Il valore resta nelle opzioni
-      dell'app di Home Assistant e non viene mai inserito nel repository pubblico.
+      Campo di compatibilità obsoleto. Dalla versione 0.1.11 questa opzione HAOS
+      viene ignorata. Configura l'autenticazione del provider direttamente in
+      OpenClaw.
   gateway_token:
     name: Segreto del Gateway OpenClaw
     description: >-
