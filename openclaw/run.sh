@@ -21,23 +21,10 @@ read_opt() {
   node -e 'const fs=require("fs"); const o=JSON.parse(fs.readFileSync(process.argv[1],"utf8")); const v=o[process.argv[2]]; if (v !== undefined && v !== null) process.stdout.write(String(v));' "$OPTIONS" "$key"
 }
 
-GATEWAY_PASSWORD="$(read_opt gateway_password)"
-LEGACY_GATEWAY_TOKEN="$(read_opt gateway_token)"
 CONTROL_UI_ORIGIN="$(read_opt control_ui_origin)"
 LOG_LEVEL="$(read_opt log_level)"
 PAIRING_MODE="$(read_opt pairing_mode)"
 APPROVE_PAIRING_REQUEST="$(read_opt approve_pairing_request)"
-
-if [ -z "$GATEWAY_PASSWORD" ] && [ -n "$LEGACY_GATEWAY_TOKEN" ]; then
-  GATEWAY_PASSWORD="$LEGACY_GATEWAY_TOKEN"
-  echo "OpenClaw HAOS: gateway_password is empty; using the legacy gateway_token value as a temporary password for upgrade compatibility."
-  echo "OpenClaw HAOS: set gateway_password in HAOS and then clear the legacy gateway_token field."
-fi
-
-if [ -z "$GATEWAY_PASSWORD" ]; then
-  echo "ERROR: configure gateway_password before starting OpenClaw."
-  exit 1
-fi
 
 if [ -z "$CONTROL_UI_ORIGIN" ]; then
   echo "ERROR: configure control_ui_origin with the exact browser origin used for the Control UI."
@@ -48,24 +35,25 @@ if [ -z "$LOG_LEVEL" ]; then
   LOG_LEVEL="warn"
 fi
 
-# Keep the Gateway credential out of openclaw.json. OpenClaw officially supports
-# OPENCLAW_GATEWAY_PASSWORD for password authentication.
+# Gateway authentication is native OpenClaw configuration in 0.1.13+.
+# Explicitly clear environment credentials so the password stored in the private
+# OpenClaw config is the sole source of truth and can be changed from Control UI.
 unset OPENCLAW_GATEWAY_TOKEN 2>/dev/null || true
-export OPENCLAW_GATEWAY_PASSWORD="$GATEWAY_PASSWORD"
+unset OPENCLAW_GATEWAY_PASSWORD 2>/dev/null || true
 export OPENCLAW_LOG_LEVEL="$LOG_LEVEL"
 
 printf '%s\n' "============================================================"
 printf 'OpenClaw HAOS wrapper: %s\n' "${OPENCLAW_HAOS_WRAPPER_VERSION:-unknown}"
 printf 'OpenClaw upstream: %s\n' "${OPENCLAW_UPSTREAM_VERSION:-unknown}"
 printf 'OpenClaw config: %s\n' "$CONFIG"
-printf 'Gateway authentication: password (credential supplied by HAOS environment)\n'
+printf 'Gateway authentication: native password\n'
 printf '%s\n' "============================================================"
 
-# OpenClaw owns all model, agent, tool, memory and provider configuration.
-# The HAOS wrapper only enforces the Gateway settings needed to expose the
-# Control UI safely on the configured LAN origin. Existing OpenClaw config is
-# preserved and can be edited through the native Control UI.
+# OpenClaw owns all model, agent, tool, memory, provider and Gateway password
+# configuration. The HAOS wrapper only enforces the Gateway infrastructure needed
+# to expose the Control UI safely on the configured LAN origin.
 node <<'NODE'
+const crypto = require('crypto');
 const fs = require('fs');
 const path = '/data/.openclaw/openclaw.json';
 const options = JSON.parse(fs.readFileSync('/data/options.json', 'utf8'));
@@ -86,9 +74,26 @@ if (fs.existsSync(path)) {
 
 const existingGateway = asObject(current.gateway);
 const auth = { ...asObject(existingGateway.auth), mode: 'password' };
-// The Gateway password is supplied only through OPENCLAW_GATEWAY_PASSWORD.
+// Token auth is no longer used by the HAOS wrapper.
 delete auth.token;
-delete auth.password;
+
+const existingPassword = typeof auth.password === 'string' ? auth.password.trim() : '';
+let generatedBootstrapPassword = '';
+let seededFromHaos = false;
+
+if (!existingPassword) {
+  const configuredBootstrap = typeof options.gateway_password === 'string'
+    ? options.gateway_password.trim()
+    : '';
+
+  if (configuredBootstrap) {
+    auth.password = configuredBootstrap;
+    seededFromHaos = true;
+  } else {
+    generatedBootstrapPassword = crypto.randomBytes(18).toString('base64url');
+    auth.password = generatedBootstrapPassword;
+  }
+}
 
 const next = {
   ...current,
@@ -116,6 +121,25 @@ if (oldRaw !== nextRaw) {
   fs.writeFileSync(path, nextRaw, { mode: 0o600 });
 } else {
   fs.chmodSync(path, 0o600);
+}
+
+if (generatedBootstrapPassword) {
+  console.log('');
+  console.log('============================================================');
+  console.log('OPENCLAW FIRST-LOGIN BOOTSTRAP PASSWORD');
+  console.log(generatedBootstrapPassword);
+  console.log('Use this password to reconnect to the Control UI, then change');
+  console.log('Gateway Authentication Password in OpenClaw Config.');
+  console.log('The wrapper will preserve the password you set in OpenClaw.');
+  console.log('============================================================');
+  console.log('');
+} else if (seededFromHaos) {
+  console.log('OpenClaw HAOS: initialized the native Gateway password from the HAOS gateway_password bootstrap field.');
+  console.log('OpenClaw HAOS: future password changes in the OpenClaw Control UI will be preserved.');
+}
+
+if (typeof options.gateway_token === 'string' && options.gateway_token.trim()) {
+  console.log('OpenClaw HAOS: legacy gateway_token is present but ignored in 0.1.13+.');
 }
 
 const legacyModelOptions = [
