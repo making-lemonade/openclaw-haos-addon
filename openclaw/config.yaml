@@ -1,7 +1,7 @@
 name: OpenClaw
-version: "0.1.10"
+version: "0.1.11"
 slug: openclaw
-description: "Isolated OpenClaw gateway for Home Assistant OS, using an OpenAI-compatible model server such as LM Studio on your LAN"
+description: "Isolated OpenClaw gateway for Home Assistant OS; configure models and providers in the native OpenClaw Control UI"
 url: "https://github.com/making-lemonade/openclaw-haos-addon"
 image: "ghcr.io/making-lemonade/openclaw-haos-addon"
 arch:
