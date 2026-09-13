@@ -5,51 +5,44 @@ configuration:
     description: >-
       Deprecated compatibility field. OpenClaw 0.1.11 and later ignore this
       HAOS option. Configure LM Studio and other model providers directly in
-      the native OpenClaw Control UI so OpenClaw owns and persists its model
-      configuration.
+      the native OpenClaw Control UI.
   lm_studio_model:
     name: Legacy model ID
     description: >-
       Deprecated compatibility field. OpenClaw 0.1.11 and later ignore this
-      HAOS option. Select and configure models directly in the native OpenClaw
-      Control UI.
+      HAOS option. Select and configure models directly in the Control UI.
   lm_studio_api_key:
     name: Legacy model server API key
     description: >-
       Deprecated compatibility field. OpenClaw 0.1.11 and later ignore this
       HAOS option. Configure provider authentication directly in OpenClaw.
-  gateway_token:
-    name: OpenClaw Gateway secret
+  gateway_password:
+    name: OpenClaw Gateway password
     description: >-
-      Required shared secret used to authenticate the OpenClaw Control UI and
-      Gateway clients. Use a long random value. Keep it private and never commit
-      it to GitHub or paste it into public logs.
+      Password used by the Control UI to authenticate to the Gateway. It is
+      supplied through OPENCLAW_GATEWAY_PASSWORD and is not stored in openclaw.json.
+  gateway_token:
+    name: Legacy Gateway token
+    description: >-
+      Kept temporarily for upgrade compatibility. If gateway_password is empty,
+      0.1.12 uses this value as a temporary password. Set gateway_password and
+      then clear this legacy field.
   control_ui_origin:
     name: Control UI browser origin
     description: >-
       Browser-visible origin allowed to access the OpenClaw Control UI. It must
-      match how you open the UI, including scheme, host and port. The default
-      works when opening http://homeassistant.local:18789.
+      exactly match the scheme, host and port used to open the UI.
   log_level:
     name: OpenClaw log level
     description: >-
-      Controls how much OpenClaw writes to the Home Assistant app log. "warn"
-      is recommended for normal use: it keeps warnings and errors while hiding
-      most connect/disconnect, status and informational messages. Use "info" or
-      "debug" temporarily for troubleshooting; "error" shows only errors. This
-      setting reduces future output but cannot erase historical Supervisor log
-      lines already retained by Home Assistant.
+      Controls OpenClaw app log verbosity. "warn" is recommended for normal use;
+      use "info" or "debug" temporarily for troubleshooting.
   pairing_mode:
     name: Browser pairing discovery mode
     description: >-
-      Temporary maintenance mode. When enabled, OpenClaw watches for pending
-      Control UI browser pairing requests for up to five minutes and prints the
-      pending request metadata and requestId in the app log. Disable it again
-      after obtaining the requestId.
+      Temporary maintenance mode used to show pending Control UI pairing requests.
   approve_pairing_request:
     name: Pairing request ID to approve
     description: >-
-      Optional exact requestId produced by pairing discovery mode. On startup
-      the app asks OpenClaw to approve only this specific pending request. Clear
-      the field after the browser connects. Requests expire or can be replaced,
-      so obtain a fresh requestId if approval fails.
+      Exact requestId obtained from pairing discovery mode. Clear it after the
+      browser connects.
