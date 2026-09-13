@@ -17,16 +17,17 @@ configuration:
       Deprecated compatibility field. OpenClaw 0.1.11 and later ignore this
       HAOS option. Configure provider authentication directly in OpenClaw.
   gateway_password:
-    name: OpenClaw Gateway password
+    name: Initial Gateway password
     description: >-
-      Password used by the Control UI to authenticate to the Gateway. It is
-      supplied through OPENCLAW_GATEWAY_PASSWORD and is not stored in openclaw.json.
+      Optional bootstrap password used only if OpenClaw does not yet have a
+      native Gateway password. If left empty, 0.1.13 generates a random first-login
+      password and prints it once in the app log. After first login, change the
+      password in the native OpenClaw Control UI; the wrapper preserves it.
   gateway_token:
     name: Legacy Gateway token
     description: >-
-      Kept temporarily for upgrade compatibility. If gateway_password is empty,
-      0.1.12 uses this value as a temporary password. Set gateway_password and
-      then clear this legacy field.
+      Deprecated compatibility field. OpenClaw 0.1.13 and later ignore this value.
+      Gateway authentication now uses the native OpenClaw password configuration.
   control_ui_origin:
     name: Control UI browser origin
     description: >-
