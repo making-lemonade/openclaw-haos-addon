@@ -1,3 +1,8 @@
+## 0.1.14
+
+- Bootstrap the OpenClaw `lmstudio` provider from the HAOS LM Studio URL, model, and optional API key.
+- Preserve the configured LM Studio model as the primary agent model when the old Qwen default is still present.
+
 # Changelog
 
 All notable changes to this project are documented here.
