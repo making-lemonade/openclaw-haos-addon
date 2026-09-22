@@ -1,5 +1,5 @@
 name: OpenClaw
-version: "0.1.13"
+version: "0.1.14"
 slug: openclaw
 description: "Isolated OpenClaw gateway for Home Assistant OS; configure models and providers in the native OpenClaw Control UI"
 url: "https://github.com/making-lemonade/openclaw-haos-addon"
