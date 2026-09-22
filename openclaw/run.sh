@@ -95,6 +95,54 @@ if (!existingPassword) {
   }
 }
 
+const legacyLmUrl = typeof options.lm_studio_url === 'string' ? options.lm_studio_url.trim() : '';
+const legacyLmModel = typeof options.lm_studio_model === 'string' ? options.lm_studio_model.trim() : '';
+const legacyLmApiKey = typeof options.lm_studio_api_key === 'string' ? options.lm_studio_api_key.trim() : '';
+
+if (legacyLmUrl && legacyLmModel) {
+  const existingModels = asObject(current.models);
+  const existingProviders = asObject(existingModels.providers);
+  const existingProvider = asObject(existingProviders.lmstudio);
+  const providerModels = Array.isArray(existingProvider.models) ? existingProvider.models : [];
+  const knownIds = new Set(providerModels.map((model) => model && typeof model.id === 'string' ? model.id : ''));
+  if (!knownIds.has(legacyLmModel)) {
+    providerModels.push({ id: legacyLmModel, name: legacyLmModel });
+  }
+
+  current.models = {
+    ...existingModels,
+    providers: {
+      ...existingProviders,
+      lmstudio: {
+        ...existingProvider,
+        baseUrl: legacyLmUrl,
+        api: 'openai-completions',
+        ...(legacyLmApiKey ? { apiKey: legacyLmApiKey } : {}),
+        models: providerModels
+      }
+    }
+  };
+
+  const existingAgents = asObject(current.agents);
+  const existingDefaults = asObject(existingAgents.defaults);
+  const existingDefaultModel = existingDefaults.model;
+  const currentPrimary = typeof existingDefaultModel === 'string'
+    ? existingDefaultModel
+    : typeof existingDefaultModel?.primary === 'string'
+      ? existingDefaultModel.primary
+      : '';
+  if (!currentPrimary || currentPrimary === 'lmstudio/qwen3.5-4b-mlx') {
+    current.agents = {
+      ...existingAgents,
+      defaults: {
+        ...existingDefaults,
+        model: { ...asObject(existingDefaultModel), primary: `lmstudio/${legacyLmModel}` }
+      }
+    };
+  }
+  console.log(`OpenClaw HAOS: configured LM Studio provider ${legacyLmUrl} with model ${legacyLmModel}.`);
+}
+
 const next = {
   ...current,
   gateway: {
