@@ -1,3 +1,8 @@
+## 0.1.15 - 2026-10-13
+
+- Updated the official ARM64 OpenClaw image to 2026.10.2, pinned to its published GHCR digest.
+- Rebuilt and published as add-on image 0.1.15 through GitHub Actions.
+
 # Changelog
 
 All notable changes to this project are documented here.
