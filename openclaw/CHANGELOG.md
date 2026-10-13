@@ -1,3 +1,8 @@
+## 0.1.15 - 2026-10-13
+
+- Updated the official ARM64 OpenClaw image from 2026.9.4 to 2026.10.2 and pinned its published GHCR digest.
+- Kept the Home Assistant wrapper and persistent OpenClaw configuration behavior intact.
+
 ## 0.1.14
 
 - Bootstrap the OpenClaw `lmstudio` provider from the HAOS LM Studio URL, model, and optional API key.
