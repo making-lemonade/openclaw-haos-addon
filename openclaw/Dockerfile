@@ -1,6 +1,6 @@
-FROM ghcr.io/openclaw/openclaw:2026.9.4-arm64@sha256:a71d22cd48540486192b584feba0483ced5d3542335d4b68e5358a01b3945eb5
+FROM ghcr.io/openclaw/openclaw:2026.10.2-arm64@sha256:c885777ddf193f2bbac2ba9d2d8ea0d8a634cce1bfd997ba641cbee21ca5e4f1
 
-ARG BUILD_VERSION=0.1.13
+ARG BUILD_VERSION=0.1.15
 ARG BUILD_ARCH=aarch64
 LABEL io.hass.version="${BUILD_VERSION}" \
       io.hass.type="app" \
@@ -26,8 +26,8 @@ ENV HOME=/data \
     OPENCLAW_WORKSPACE_DIR=/data/.openclaw/workspace \
     OPENCLAW_GATEWAY_PORT=18789 \
     OPENCLAW_DISABLE_BONJOUR=1 \
-    OPENCLAW_HAOS_WRAPPER_VERSION=0.1.13 \
-    OPENCLAW_UPSTREAM_VERSION=2026.9.4
+    OPENCLAW_HAOS_WRAPPER_VERSION=0.1.15 \
+    OPENCLAW_UPSTREAM_VERSION=2026.10.2
 
 HEALTHCHECK --interval=15s --timeout=10s --start-period=20s --retries=3 \
   CMD ["node", "dist/docker-healthcheck.js"]
