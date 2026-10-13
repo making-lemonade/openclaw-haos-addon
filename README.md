@@ -4,7 +4,7 @@ Home Assistant OS add-on for running the official OpenClaw gateway on a Raspberr
 
 ## Security model
 
-- Official OpenClaw image only, pinned to version `2026.9.4` and an ARM64 image digest.
+- Official OpenClaw image only, pinned to version `2026.10.2` and an ARM64 image digest.
 - Runs as the upstream non-root `node` user after image setup.
 - Normal container networking is enabled: OpenClaw can reach the Internet and devices on the LAN such as LM Studio.
 - `host_network` is disabled, so OpenClaw does not share the HAOS host network namespace.
@@ -36,7 +36,7 @@ Before first start configure the app options. See `openclaw/DOCS.md`.
 
 The Dockerfile is based on the official OpenClaw GitHub Container Registry image:
 
-`ghcr.io/openclaw/openclaw:2026.9.4-arm64`
+`ghcr.io/openclaw/openclaw:2026.10.2-arm64`
 
 The image is additionally pinned by SHA-256 digest in `openclaw/Dockerfile` so a moved tag cannot silently replace the base image.
 
